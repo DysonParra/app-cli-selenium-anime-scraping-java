@@ -1,0 +1,44 @@
+{
+    "config": {
+        "only-validate-config-files": false,
+        "delay-time-before-end": 3000,
+        "max-action-page-tries": 2
+    },
+    "navigation": [
+        {
+            "type": "page",
+            "url": "https://www.google.com",
+            "delay-time-before-next": 100,
+            "elements": [
+                {
+                    "type": "dom-element",
+                    "id": null,
+                    "name": null,
+                    "xpath": "//textarea",
+                    "actions": [
+                        {
+                            "type": "set-text",
+                            "text": "<TEXT_TO_SET>",
+                            "clear-before-set": true,
+                            "delay-time-before-next": 100
+                        }
+                    ]
+                },
+                {
+                    "type": "dom-element",
+                    "id": null,
+                    "name": null,
+                    "xpath": "//body",
+                    "actions": [
+                        {
+                            "type": "custom-action-example",
+                            "output-path": "<OUTPUT_PATH>",
+                            "output-file-name": "<OUTPUT_PAGE_FILE>",
+                            "delay-time-before-next": 100
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

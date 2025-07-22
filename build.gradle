@@ -1,0 +1,251 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.2.0'
+    }
+}
+
+plugins {
+    //id 'org.springframework.boot' version '2.4.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'application'
+    id 'java'
+}
+
+apply plugin: 'com.google.cloud.tools.appengine'
+apply plugin: "io.spring.dependency-management"
+//apply plugin: 'maven'
+//apply plugin: 'signing'
+
+group = 'io.github.dysonparra'
+archivesBaseName = "${archivesBaseName}"
+    .replaceAll("-java\$", "")
+    .replaceFirst("^(proj-mod-).*?-(lib|app)-", "")
+    .replaceFirst("^(lib|app)-", "")
+    .replaceFirst("^(cli|gui|web|mob)-", "")
+version = '1.0-SNAPSHOT'
+
+def rootPackage = 'com.project.dev'
+def rootDir = "${rootPackage}".replaceAll("\\.", "/")
+def mainClass = "${rootPackage}.Application"
+def mainFile = "${mainClass}".replaceAll("\\.", "/")
+def gitUser = "DysonParra"
+
+def classifierJar = "bin-min"
+def classifierFatJar = "bin"
+def classifierJarLib = "lib-min"
+def classifierFatJarLib = "lib-fat"
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+application {
+    mainClassName = "${mainClass}"
+}
+
+jar {
+    archiveClassifier.set("${classifierJar}")
+    manifest {
+        attributes(
+            'Main-Class': "${mainClass}"
+        )
+    }
+}
+
+tasks.register('fatJar', Jar) {
+    archiveClassifier.set("${classifierFatJar}")
+    manifest.from jar.manifest
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    with jar
+}
+
+tasks.register('jarLib', Jar) {
+    archiveClassifier.set("${classifierJarLib}")
+    exclude "${mainFile}.class"
+    exclude "${rootDir}/tester"
+    manifest.from jar.manifest
+    with jar
+}
+
+tasks.register('fatJarLib', Jar) {
+    archiveClassifier.set("${classifierFatJarLib}")
+    exclude "${mainFile}.class"
+    exclude "${rootDir}/tester"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest.from jar.manifest
+    with fatJar
+}
+
+tasks.register('javadocJar', Jar) {
+    archiveClassifier.set("javadoc")
+    exclude "${mainFile}.class"
+    exclude "${rootDir}/tester"
+    from javadoc
+}
+
+tasks.register('sourcesJar', Jar) {
+    archiveClassifier.set("sources")
+    exclude "${mainFile}.class"
+    exclude "${rootDir}/tester"
+    from sourceSets.main.allSource
+}
+
+build.doLast {
+    String filename = "${project.buildDir}\\libs\\${archivesBaseName}-${version}-${classifierJar}.jar"  
+    boolean successDeleted = new File(filename).delete()  
+    //println "${filename} deleted ${successDeleted}"
+}
+
+artifacts {
+    archives jar
+    archives fatJar
+    //archives jarLib
+    //archives fatJarLib
+    //archives javadocJar
+    //archives sourcesJar
+}
+
+processResources {
+    includeEmptyDirs = false
+    exclude '**/.gitkeep'
+    from ('src/main/java') {
+        include '**/*.dll'
+    }
+}
+
+pluginManager.withPlugin('org.springframework.boot') {
+
+    springBoot {
+        mainClass = "${mainClass}"
+    }
+
+    bootRun {
+        standardInput = System.in
+    }
+
+    bootJar {
+        mainClassName = "${mainClass}"
+        archiveFileName = "${archiveBaseName.get()}-${version}-${classifierFatJar}.${archiveExtension.get()}"
+    }
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    archives.artifacts.removeAll {
+        def depTasks = it.getBuildDependencies().getDependencies(null)
+        depTasks.contains(distZip) || depTasks.contains(distTar)  
+    }
+}
+
+repositories {
+    maven {
+        url 'https://s01.oss.sonatype.org/content/repositories/snapshots'
+    }
+    mavenCentral()
+}
+
+ext {
+    //set('springCloudVersion', "2020.0.2")
+    mapstructVersion = "1.3.0.Final"
+}
+
+compileJava {
+    options.compilerArgs = [
+        //'-Amapstruct.defaultComponentModel=spring',
+        //'-Amapstruct.suppressGeneratorTimestamp=true',
+        //'-Amapstruct.suppressGeneratorVersionInfoComment=true'
+    ]
+}
+
+/*
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            pom.project {
+                name = "${archivesBaseName}"
+                group = "${group}"
+                artifactId = "${archivesBaseName}"
+                version = "${version}"
+                description = 'TODO: Library description'
+                url = "https://github.com/${gitUser}/${archivesBaseName}"
+                packaging 'jar'
+                scm {
+                    connection = "scm:git:git://${gitUser}/${archivesBaseName}.git"
+                    developerConnection = "scm:git:git://${gitUser}/${archivesBaseName}.git"
+                    url = "https://github.com/${gitUser}/${archivesBaseName}/tree/master"
+                }
+                licenses {
+                    license {
+                        name = 'GNU GENERAL PUBLIC LICENSE, Version 3'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'arklet'
+                        name = 'Dyson Parra'
+                        email = 'dysontilano@gmail.com'
+                        organization = 'Sonatype'
+                        organizationUrl = 'http://www.sonatype.com'
+                    }
+                }
+            }
+        }
+    }
+}
+*/
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    //implementation group: 'io.github.dysonparra', name: 'flag-processor', version: '0.1.0-SNAPSHOT', classifier: 'lib-min'
+    //implementation group: 'io.github.dysonparra', name: 'file-processor', version: '0.1.0-SNAPSHOT', classifier: 'lib-min'
+    //implementation group: 'io.github.dysonparra', name: 'selenium-generic', version: '0.1.0-SNAPSHOT', classifier: 'lib-min'
+    //implementation group: 'io.github.dysonparra', name: 'tray-setter', version: '0.1.0-SNAPSHOT', classifier: 'lib-min'
+
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.3'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.34.0'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: '4.34.0'
+    //implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+}
+
+test {
+    useJUnitPlatform()
+}
