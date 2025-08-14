@@ -1,0 +1,43 @@
+{
+    "config": {
+        "only-validate-config-files": false,
+        "delay-time-before-end": 3000,
+        "max-action-page-tries": 2
+    },
+    "navigation": [
+        {
+            "type": "navigation-range-numeric",
+            "start": 1,
+            "end": 1,
+            "navigation": [
+                {
+                    "type": "page",
+                    "url": "<NYAA_BASE_URL>%navRangeValue%",
+                    "delay-time-before-next": 100,
+                    "elements": [
+                        {
+                            "type": "dom-element",
+                            "id": null,
+                            "name": null,
+                            "xpath": "//body",
+                            "actions": [
+                                {
+                                    "type": "nyaa-scraping",
+                                    "excluded-series-file-path": "<NYAA_LIST_EXCLUDED_SERIES_FILE_PATH>",
+                                    "min-torrents-date": "<NYAA_MIN_TORRENTS_DATE>",
+                                    "dom-table-element-xpath": "//tbody//tr",
+                                    "dom-table-element-title-xpath": ".//td[@colspan='2']//a[not(contains(@href, 'comments'))]",
+                                    "dom-table-element-date-xpath": ".//td[@data-timestamp]",
+                                    "dom-table-element-download-button-xpath": ".//td[@class='text-center']//a[contains(@href, 'download')]",
+                                    "delay-time-before-actions": 1000,
+                                    "delay-time-beetween-downloads": 100,
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
