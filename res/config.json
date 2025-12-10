@@ -1,5 +1,7 @@
 {
     "navigationFilePathOriginal": "res\\navigation_nyaa.json",
+    "navigationFilePathAnimeNinja": "res\\navigation_anime_ninja.json",
+    "navigationFilePathAniworld": "res\\navigation_aniworld.json",
     "navigationFilePathNyaa": "res\\navigation_nyaa.json",
     "navigationFilePath": "res\\navigation_nyaa.json",
     "dataFilePath": "res\\data.json",
