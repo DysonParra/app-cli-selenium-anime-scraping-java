@@ -28,21 +28,47 @@
                                     "delay-time-before-next": 10
                                 },
                                 {
+                                    "type": "wait-page-load",
+                                    "timeout": 30000,
+                                    "delay-time-before-next": 100
+                                },
+                                {
                                     "type": "script",
                                     "script": [
                                         "var img = document.evaluate(\"//img[contains(@class, 'lillie')]\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;",
                                         "var url = window.location.href;",
+                                        "var filename = url.split('/');",
+                                        "filename = filename[filename.length-1].split('.')[0] + '.png';",
+                                        "while(!(img.complete && img.naturalWidth > 0)) {",
+                                        "    await new Promise(r => setTimeout(r, 100));",
+                                        "}",
                                         "fetch(img.src)",
                                         ".then(res => res.blob())",
                                         ".then(blob => {",
                                         "    const a = document.createElement('a');",
                                         "    a.href = URL.createObjectURL(blob);",
-                                        "    a.download = url.split('/')[url.length-1].split('.')[0] + '.png';",
+                                        "    a.download = filename;",
                                         "    a.click();",
                                         "});",
+                                        "await new Promise(r => setTimeout(r, 500));",
+                                        "return filename;"
+                                    ],
+                                    "delay-time-before-next": 1
+                                },
+                                {
+                                    "type": "wait-file-exist",
+                                    "filepath": "C:/Users/Developer/Downloads/%lastScriptResult%",
+                                    "validation-gap": 500,
+                                    "timeout": 10000,
+                                    "delay-time-before-next": 1
+                                },
+                                {
+                                    "type": "script",
+                                    "script": [
+                                        "var url = window.location.href;",
                                         "return url.split('#')[0];"
                                     ],
-                                    "delay-time-before-next": 2000
+                                    "delay-time-before-next": 1
                                 },
                                 {
                                     "type": "clic",
