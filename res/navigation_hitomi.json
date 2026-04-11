@@ -1,0 +1,115 @@
+{
+    "config": {
+        "only-validate-config-files": false,
+        "delay-time-before-end": 3000,
+        "max-action-page-tries": 2
+    },
+    "navigation": [
+        {
+            "type": "navigation-range-file-lines",
+            "input-file-path": "<HITOMI_INPUT_FILE>",
+            "line-pattern": "^(http://|https://).+",
+            "navigation": [
+                {
+                    "type": "page",
+                    "url": "%navRangeValue%",
+                    "delay-time-before-next": 100,
+                    "elements": [
+                        {
+                            "type": "dom-element",
+                            "id": null,
+                            "name": null,
+                            "xpath": "//a[contains(normalize-space(text()),'Gallery Info')]",
+                            "actions": [
+                                {
+                                    "type": "wait-element-exist",
+                                    "timeout": 5000,
+                                    "element-xpath": "//img[contains(@class, 'lillie')]",
+                                    "delay-time-before-next": 10
+                                },
+                                {
+                                    "type": "script",
+                                    "script": [
+                                        "var img = document.evaluate(\"//img[contains(@class, 'lillie')]\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;",
+                                        "var url = window.location.href;",
+                                        "fetch(img.src)",
+                                        ".then(res => res.blob())",
+                                        ".then(blob => {",
+                                        "    const a = document.createElement('a');",
+                                        "    a.href = URL.createObjectURL(blob);",
+                                        "    a.download = url.split('/')[url.length-1].split('.')[0] + '.png';",
+                                        "    a.click();",
+                                        "});",
+                                        "return url.split('#')[0];"
+                                    ],
+                                    "delay-time-before-next": 2000
+                                },
+                                {
+                                    "type": "clic",
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "id": null,
+                            "name": null,
+                            "xpath": "//body",
+                            "actions": [
+                                {
+                                    "type": "wait-page-load",
+                                    "timeout": 30000,
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "id": null,
+                            "name": null,
+                            "xpath": "//input",
+                            "actions": [
+                                {
+                                    "type": "script",
+                                    "script": [
+                                        "const artistsItems = document.querySelectorAll('#artists li');",
+                                        "const tagsItems = document.querySelectorAll('#tags li');",
+                                        "var artists = Array.from(artistsItems).map(li => li.textContent.trim()).join(' & ');",
+                                        "var title = document.evaluate(\"//div[contains(@class,'gallery')]//h1//a[contains(@href, 'reader')]\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;",
+                                        "var pages = document.evaluate(\"//ul[@class='thumbnail-list']//li[last()]//div//a\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue['href'];",
+                                        "var tags = Array.from(tagsItems).map(li => li.textContent.trim()).join(' & ');",
+                                        "return '%lastScriptResult%'.padEnd(50, ' ') + 'Pages: ' + pages.split('#')[1].padEnd(15, ' ') + artists.padEnd(35, ' ') + ' ' + title.textContent.padEnd(200, ' ') + tags;"
+                                    ],
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "save-text-to-file",
+                                    "text": "%lastScriptResult%\n",
+                                    "output-path": "<OUTPUT_PATH>",
+                                    "output-file-name": "<HITOMI_OUTPUT_FILE>",
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "script",
+                                    "script": [
+                                        "const artistsItems = document.querySelectorAll('#artists li');",
+                                        "var artists = Array.from(artistsItems).map(li => li.querySelector('a')?.href).join('\\n');",
+                                        "return artists;"
+                                    ],
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "save-text-to-file",
+                                    "text": "%lastScriptResult%\n",
+                                    "output-path": "<OUTPUT_PATH>",
+                                    "output-file-name": "<HITOMI_OUTPUT_ARTISTS>",
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

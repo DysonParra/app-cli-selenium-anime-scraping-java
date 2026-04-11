@@ -2,7 +2,10 @@
     "TEXT_TO_SET": "Testing",
     "OUTPUT_PATH": "res\\output",
     "OUTPUT_PAGE_FILE": "current_page.html",
+    "HITOMI_INPUT_FILE": "res/input/hitomi_urls.txt",
+    "HITOMI_OUTPUT_FILE": "hitomi_output_urls.txt",
+    "HITOMI_OUTPUT_ARTISTS": "hitomi_output_artists.txt",
     "NYAA_BASE_URL": "https://nyaa.si/user/Erai-raws?f=0&c=0_0&q=1080+avc&p=",
-    "NYAA_MIN_TORRENTS_DATE": "2026-04-10 10:00",
+    "NYAA_MIN_TORRENTS_DATE": "2026-04-10 15:00",
     "NYAA_LIST_EXCLUDED_SERIES_FILE_PATH": "res/input/nyaa_list_excluded_series.txt"
 }

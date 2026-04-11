@@ -3,6 +3,7 @@
     "navigationFilePathAnimeNinja": "res\\navigation_anime_ninja.json",
     "navigationFilePathAniworld": "res\\navigation_aniworld.json",
     "navigationFilePathNyaa": "res\\navigation_nyaa.json",
+    "navigationFilePathHitomi": "res\\navigation_hitomi.json",
     "navigationFilePath": "res\\navigation_nyaa.json",
     "dataFilePath": "res\\data.json",
     "chromeDriverPath": "res\\chromedriver.exe",
