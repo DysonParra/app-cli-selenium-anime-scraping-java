@@ -35,36 +35,6 @@
                                 {
                                     "type": "script",
                                     "script": [
-                                        "var img = document.evaluate(\"//img[contains(@class, 'lillie')]\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;",
-                                        "var url = window.location.href;",
-                                        "var filename = url.split('/');",
-                                        "filename = filename[filename.length-1].split('.')[0] + '.png';",
-                                        "while(!(img.complete && img.naturalWidth > 0)) {",
-                                        "    await new Promise(r => setTimeout(r, 100));",
-                                        "}",
-                                        "fetch(img.src)",
-                                        ".then(res => res.blob())",
-                                        ".then(blob => {",
-                                        "    const a = document.createElement('a');",
-                                        "    a.href = URL.createObjectURL(blob);",
-                                        "    a.download = filename;",
-                                        "    a.click();",
-                                        "});",
-                                        "await new Promise(r => setTimeout(r, 500));",
-                                        "return filename;"
-                                    ],
-                                    "delay-time-before-next": 1
-                                },
-                                {
-                                    "type": "wait-file-exist",
-                                    "filepath": "C:/Users/Developer/Downloads/%lastScriptResult%",
-                                    "validation-gap": 500,
-                                    "timeout": 10000,
-                                    "delay-time-before-next": 1
-                                },
-                                {
-                                    "type": "script",
-                                    "script": [
                                         "var url = window.location.href;",
                                         "return url.split('#')[0];"
                                     ],
@@ -130,6 +100,47 @@
                                     "output-path": "<OUTPUT_PATH>",
                                     "output-file-name": "<HITOMI_OUTPUT_ARTISTS>",
                                     "delay-time-before-next": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "id": "dl-button",
+                            "name": null,
+                            "xpath": null,
+                            "actions": [
+                                {
+                                    "type": "clic",
+                                    "delay-time-before-next": 1000
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "id": null,
+                            "name": null,
+                            "xpath": "//body",
+                            "actions": [
+                                {
+                                    "type": "wait-element-exist",
+                                    "timeout": 5000,
+                                    "element-xpath": "//div[@id='progressbar']",
+                                    "delay-time-before-next": 10
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "id": null,
+                            "name": null,
+                            "xpath": "//div[@id='progressbar']",
+                            "actions": [
+                                {
+                                    "type": "wait-attribute-change",
+                                    "timeout": 600000,
+                                    "attribute": "aria-valuenow",
+                                    "expected-value": "100",
+                                    "delay-time-before-next": 2000
                                 }
                             ]
                         }
