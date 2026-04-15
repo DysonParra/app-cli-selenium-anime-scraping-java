@@ -17,6 +17,7 @@
                     "elements": [
                         {
                             "type": "dom-element",
+                            "process-as-list": false,
                             "id": null,
                             "name": null,
                             "xpath": "//a[contains(normalize-space(text()),'Gallery Info')]",
@@ -78,6 +79,7 @@
                         },
                         {
                             "type": "dom-element",
+                            "process-as-list": false,
                             "id": null,
                             "name": null,
                             "xpath": "//body",
@@ -91,6 +93,7 @@
                         },
                         {
                             "type": "dom-element",
+                            "process-as-list": false,
                             "id": null,
                             "name": null,
                             "xpath": "//input",
