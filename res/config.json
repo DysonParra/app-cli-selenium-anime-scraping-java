@@ -4,6 +4,7 @@
     "navigationFilePathNyaa": "res\\navigation_nyaa.json",
     "navigationFilePathHitomi": "res\\navigation_hitomi.json",
     "navigationFilePathHitomiDownload": "res\\navigation_hitomi_download.json",
+    "navigationFilePathTmo": "res\\navigation_tmo.json",
     "navigationFilePath": "res\\navigation_nyaa.json",
     "dataFilePath": "res\\data.json",
     "chromeDriverPath": "res\\chromedriver.exe",

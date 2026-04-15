@@ -1,0 +1,71 @@
+{
+    "config": {
+        "only-validate-config-files": false,
+        "delay-time-before-end": 3000,
+        "max-action-page-tries": 2
+    },
+    "navigation": [
+        {
+            "type": "navigation-range-file-lines",
+            "input-file-path": "<TMO_INPUT_FILE>",
+            "line-pattern": "^(http://|https://).+",
+            "navigation": [
+                {
+                    "type": "page",
+                    "url": "%navRangeValue%",
+                    "delay-time-before-next": 100,
+                    "elements": [
+                        {
+                            "type": "dom-element",
+                            "process-as-list": false,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//body",
+                            "actions": [
+                                {
+                                    "type": "wait-page-load",
+                                    "timeout": 30000,
+                                    "delay-time-before-next": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dom-element",
+                            "process-as-list": true,
+                            "id": null,
+                            "name": null,
+                            "xpath": "//div[contains(@class,'reader-content-wrapper')]//div//img",
+                            "actions": [
+                                {
+                                    "type": "script",
+                                    "script": [
+                                        "var url = arguments[0].src;",
+                                        "var filename = arguments[0].alt + '.png';",
+                                        "fetch(url)",
+                                        ".then(res => res.blob())",
+                                        ".then(blob => {",
+                                        "    const a = document.createElement('a');",
+                                        "    a.href = URL.createObjectURL(blob);",
+                                        "    a.download = filename;",
+                                        "    a.click();",
+                                        "});",
+                                        "await new Promise(r => setTimeout(r, 500));",
+                                        "return filename;"
+                                    ],
+                                    "delay-time-before-next": 100
+                                },
+                                {
+                                    "type": "wait-file-exist",
+                                    "filepath": "C:/Users/Developer/Downloads/%lastScriptResult%",
+                                    "validation-gap": 500,
+                                    "timeout": 10000,
+                                    "delay-time-before-next": 1
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
