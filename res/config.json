@@ -5,6 +5,7 @@
     "navigationFilePathHitomi": "res\\navigation_hitomi.json",
     "navigationFilePathHitomiDownload": "res\\navigation_hitomi_download.json",
     "navigationFilePathTmo": "res\\navigation_tmo.json",
+    "navigationFilePathTvyManga": "res\\navigation_tvymanga.json",
     "navigationFilePath": "res\\navigation_nyaa.json",
     "dataFilePath": "res\\data.json",
     "chromeDriverPath": "res\\chromedriver.exe",
