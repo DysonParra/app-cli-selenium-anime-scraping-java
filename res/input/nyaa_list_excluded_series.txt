@@ -193,11 +193,11 @@ Awajima Hyakkei
 Ghost Concert: Missing Songs
 Ichijyoma Mankitsu Gurashi
 Kamiina Botan
-kanteishi 
-Saikyou no Shokugyou wa Yuusha demo Kenja demo Naku Kanteishi (Kari) Rashii desu yo
+kanteishi
+Saikyou no Shokugyou wa Yuusha demo Kenja demo Naku Kanteishi
 Kujima Utaeba Ie Hororo
 Maid-san wa Taberu dake 
-[Erai-raws] Mao - 
+\[Erai-raws\] Mao - 
 Megami ~Isekai Tensei Nani ni Naritai Desu ka~ Ore ~Yuusha no Rokkotsu de~
 Tsue to Tsurugi no Wistoria
 Kami no Niwatsuki Kusunoki-tei
@@ -226,3 +226,5 @@ Mairimashita Iruma-kun
 Isekai Nonbiri Nouka
 Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken
 Dorohedoro
+Tongari Boushi no Atelier
+Snowball Earth
