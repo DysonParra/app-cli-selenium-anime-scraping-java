@@ -34,7 +34,7 @@
                             "process-as-list": true,
                             "id": null,
                             "name": null,
-                            "xpath": "//div[contains(@class,'reader-content-wrapper')]//div//img",
+                            "xpath": "//div[contains(@class,'reader-content-wrapper')]//img",
                             "actions": [
                                 {
                                     "type": "script",
