@@ -7,7 +7,7 @@
     "navigation": [
         {
             "type": "navigation-range-file-lines",
-            "input-file-path": "<TVYMANGA_INPUT_FILE>",
+            "input-file-path": "<LECTORTMO_INPUT_FILE>",
             "line-pattern": "^(http://|https://).+",
             "navigation": [
                 {
@@ -34,14 +34,13 @@
                             "process-as-list": true,
                             "id": null,
                             "name": null,
-                            "xpath": "//div[contains(@class,'entry-content')]//center//img",
+                            "xpath": "//div[contains(@class,'reader-content-wrapper')]//img",
                             "actions": [
                                 {
                                     "type": "script",
                                     "script": [
                                         "var url = arguments[0].src;",
-                                        "var idx = Number('%lastScriptResult%'.replace('.png', '').replace('.jpg', '').replace('.jpeg', '')) + 1",
-                                        "var filename = `${idx}`.padStart(3, '0') + '.jpg';",
+                                        "var filename = arguments[0].alt + '.webp';",
                                         "fetch(url)",
                                         ".then(res => res.blob())",
                                         ".then(blob => {",
